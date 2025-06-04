@@ -1,7 +1,7 @@
 name: Sample_MultiJobs
 on:
   push:
-    branches: [main]
+    branches: [test-main]
 env:
   ARTIFACT_NAME: "TestArtifact"
   
