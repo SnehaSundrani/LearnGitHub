@@ -18,7 +18,7 @@ jobs:
     name: job3
     uses: actions/upload-artifact@v4
     with:
-      name: ${{env.ARTIFACT_NAME}}_${{date +%Y%m%d_%H%M%S}}
+      name: ${{env.ARTIFACT_NAME}}_${{github.run_id}}
       path: .
 
   job2:
