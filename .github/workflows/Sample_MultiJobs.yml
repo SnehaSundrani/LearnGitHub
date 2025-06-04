@@ -11,18 +11,19 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Run sample print command
-      run: echo "This is job1, step1 $(date)"
+      run: echo "This is job1, step1 %DATE%"
     - name: checkout
       uses: actions/checkout@v2
-  job2:
-    name: job2
-    runs-on: ubuntu-latest
-    needs: [job1, job3]
-    steps:
-      - run: echo "This is job2, step1"
   job3:
     name: job3
     uses: actions/upload-artifact@v4
     with:
       name: ${{env.ARTIFACT_NAME}}_$(date +%Y%m%d_%H%M%S)
       path: .
+
+  job2:
+    name: job2
+    runs-on: ubuntu-latest
+    needs: [job1, job3]
+    steps:
+      - run: echo "This is job2, step1"
