@@ -1,3 +1,3 @@
 # LearnGitHub
 This repository is created for learning GitHub features.
-trigger release for v1.
+trigger release for V1.
