@@ -23,8 +23,18 @@ jobs:
                  
       - name: Fetch the commit message
         run: |
-              echo "COMMIT_MSG=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
-              echo "Commit message is: $COMMIT_MSG" 
+              # Check out the repository code and switch to the branch
+              git fetch origin ${{ github.event.pull_request.head.ref }}
+              git checkout ${{ github.event.pull_request.head.ref }}
+              
+              # Fetch the latest commit message
+              COMMIT_MSG=$(git log -1 --pretty=format:'%s')
+              
+              # Output the commit message
+              echo "Commit message is: $COMMIT_MSG"
+              
+              # Store in environment variable for later use
+              echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
 
       - name: trigger release if merged PR commit message contains trigger release keywords
         if: ${{ contains(env.COMMIT_MSG,'trigger release') }}    
