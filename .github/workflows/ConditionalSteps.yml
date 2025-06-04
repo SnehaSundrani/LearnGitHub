@@ -29,3 +29,4 @@ jobs:
       - name: trigger release if merged PR commit message contains trigger release keywords
         if: ${{ contains(env.COMMIT_MSG,'trigger release') }}    
         run: echo "Triggering release build"
+   
