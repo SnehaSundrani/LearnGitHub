@@ -17,13 +17,14 @@ jobs:
               echo "merged_state=$MERGED_STATE" >> $GITHUB_ENV
               
       - name: Execute if merged
+        id: checkout_code_if_PR_is_merged
         if: ${{ env.merged_state == 'true' }}
-        run: echo "This pull request has been merged!"
-        
+        uses: actions/checkout@v2
+                 
       - name: Fetch the commit message
         run: echo "COMMIT_MSG=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
-        
-      - name: checkout code and trigger release if PR is merged and commit message contains trigger release keywords
-        id: checkout_code_if_PR_is_merged
-        if: ${{ env.merged_state == 'true' }} && ${{ contains(env.COMMIT_MSG,'trigger release') }}    
-        uses: actions/checkout@v2
+
+      - name: trigger release if merged PR commit message contains trigger release keywords
+        if: ${{ contains(env.COMMIT_MSG,'trigger release') }}    
+        run: echo "Triggering release build"
+   
