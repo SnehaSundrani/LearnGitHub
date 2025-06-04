@@ -1,2 +1,2 @@
 # LearnGitHub
-This repository is created for learning GitHub features
+This repository is created for learning GitHub features.
