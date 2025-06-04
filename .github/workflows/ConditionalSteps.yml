@@ -24,6 +24,6 @@ jobs:
         run: echo "COMMIT_MSG=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
         
       - name: checkout code and trigger release if PR is merged and commit message contains trigger release keywords
-        id: checkout code if PR is merged
+        id: checkout_code_if_PR_is_merged
         if: ${{ env.merged_state == 'true' }} && ${{ contains(env.COMMIT_MSG,'trigger release') }}    
         uses: actions/checkout@v2
