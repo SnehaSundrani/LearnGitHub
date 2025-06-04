@@ -7,20 +7,25 @@ on:
 
 jobs:
   check_merged_status:
-  runs-on: ubuntu-latest
-  steps:
-  - name: Check if PR is merged
-    id: check_merge
-    run: |
-          PR_URL=${{ github.event.pull_request.url }}
-          MERGED_STATE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" $PR_URL | jq -r '.merged')
-          echo "merged_state=$MERGED_STATE" >> $GITHUB_ENV
-  - name: Execute if merged
-      if: ${{ env.merged_state == 'true' }}
-      run: echo "This pull request has been merged!"
-  - name: checkout code and trigger release if PR is merged and commit message contains trigger release keywords
-      run: echo "COMMIT_MSG=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
-      if: ${{ env.merged_state == 'true' }} && ${{ contains(env.COMMIT_MSG,'trigger release') }}
-      id: checkout code if PR is merged
-      uses: actions/checkout@v2
-      run: echo "triggering release"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR is merged
+        id: check_merge
+        run: |
+              PR_URL=${{ github.event.pull_request.url }}
+              MERGED_STATE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" $PR_URL | jq -r '.merged')
+              echo "merged_state=$MERGED_STATE" >> $GITHUB_ENV
+              
+      - name: Execute if merged
+        id: checkout_code_if_PR_is_merged
+        if: ${{ env.merged_state == 'true' }}
+        uses: actions/checkout@v2
+                 
+      - name: Fetch the commit message
+        run: |
+              echo "COMMIT_MSG=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+              echo "Commit message is: $COMMIT_MSG" 
+
+      - name: trigger release if merged PR commit message contains trigger release keywords
+        if: ${{ contains(env.COMMIT_MSG,'trigger release') }}    
+        run: echo "Triggering release build"
